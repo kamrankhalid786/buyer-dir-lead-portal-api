@@ -29,4 +29,8 @@ export class UserService {
   remove(id: number) {
     return `This action removes a #${id} user`;
   }
+
+  findByEmail(email: string) {
+    return this.userModel.findOne({ email });
+  }
 }
