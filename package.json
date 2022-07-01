@@ -31,10 +31,12 @@
     "class-validator": "^0.13.2",
     "joi": "^17.6.0",
     "mongoose": "^6.2.6",
+    "nestjs-paginate": "^3.0.1",
     "nestjs-twilio": "^2.1.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "soft-delete-plugin-mongoose": "^1.0.15",
     "swagger-ui-express": "^4.3.0",
     "twilio": "^3.75.0"
   },
