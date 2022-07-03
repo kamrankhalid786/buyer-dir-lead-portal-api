@@ -16,8 +16,22 @@ export class UserService {
     return await createUser.save();
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+  async findAll(options): Promise<User[]> {
+    const sort = options.sort;
+    const page: number = options.page || 1;
+    const limit = options.limit || 10;
+
+    const data = this.userModel
+      .find({}, {}, { sort })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .exec();
+
+    return data;
+  }
+
+  async count() {
+    return this.userModel.countDocuments();
   }
 
   async findOne(id: number) {

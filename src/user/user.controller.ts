@@ -7,6 +7,8 @@ import {
   Patch,
   Delete,
   UseFilters,
+  Query,
+  Req,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,16 +21,6 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    const isEmailExist = this.userService.findByEmail(createUserDto.email);
-    if (isEmailExist) {
-      return {
-        message: ['Email already exist'],
-        status: 400,
-        meta: {},
-        result: {},
-      };
-    }
-
     const data = this.userService.create(createUserDto);
 
     return {
@@ -40,8 +32,37 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  async findAll(@Query('sort') sortBy, @Req() req) {
+    const page: number = req.query.page || 1;
+    const limit: number = req.query.perPage || 10;
+
+    let order_by = -1;
+    const sort_parameter = req.query.sort || 'descending-createdAt';
+    const sort_with_order = sort_parameter.split('-');
+
+    if (sort_with_order[0] === 'ascending') {
+      order_by = 1;
+    }
+
+    const sort = {};
+    sort[sort_with_order[1]] = order_by;
+    const options = {
+      page,
+      limit,
+      sort,
+    };
+    const data = await this.userService.findAll(options);
+    const total_records = await this.userService.count();
+
+    return {
+      status: 200,
+      message: 'Success',
+      result: data,
+      meta: {
+        total_records: total_records,
+        sort_by: sortBy,
+      },
+    };
   }
 
   @Get(':id')

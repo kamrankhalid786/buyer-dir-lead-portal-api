@@ -3,12 +3,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { User, UserSchema } from './user.schema';
+import { UniqueValidator } from 'src/core/decorators/unique.user.decorator';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, UniqueValidator],
 })
 export class UserModule {}

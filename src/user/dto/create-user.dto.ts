@@ -5,8 +5,10 @@ import {
   Matches,
   MaxLength,
   MinLength,
+  Validate,
 } from 'class-validator';
 import { Match } from 'src/core/decorators/match.decorator';
+import { UniqueValidator } from 'src/core/decorators/unique.user.decorator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -17,6 +19,7 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   @IsEmail()
+  @Validate(UniqueValidator, ['email'], { message: 'email already taken' })
   email: string;
   phone: string;
 
