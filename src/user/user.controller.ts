@@ -19,7 +19,18 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
+    const isEmailExist = this.userService.findByEmail(createUserDto.email);
+    if (isEmailExist) {
+      return {
+        message: ['Email already exist'],
+        status: 400,
+        meta: {},
+        result: {},
+      };
+    }
+
     const data = this.userService.create(createUserDto);
+
     return {
       status: 201,
       message: 'Success',
