@@ -25,6 +25,11 @@ export class UserService {
       .find({}, {}, { sort })
       .skip((page - 1) * limit)
       .limit(limit)
+      .populate({
+        path: 'userRole',
+        select: 'name',
+        options: { strictPopulate: false },
+      })
       .exec();
 
     return data;
@@ -35,7 +40,7 @@ export class UserService {
   }
 
   async findOne(id: number) {
-    return `This action returns a #${id} user`;
+    return await this.userModel.findById(id, {});
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {

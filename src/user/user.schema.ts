@@ -18,9 +18,6 @@ export class User {
   password: string;
 
   @Prop({ required: true })
-  passwordConfirm: string;
-
-  @Prop({ required: true })
   phone: string;
 
   @Prop({ type: Types.ObjectId, ref: 'Role' })

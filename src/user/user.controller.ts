@@ -66,13 +66,23 @@ export class UserController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  async findOne(@Param('id') id: number) {
+    const data = await this.userService.findOne(id);
+    return {
+      status: 200,
+      message: 'Success',
+      result: data,
+    };
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  async update(@Param('id') id: number, @Body() updateUserDto: UpdateUserDto) {
+    const data = await this.userService.update(id, updateUserDto);
+    return {
+      status: 200,
+      message: 'Success',
+      result: data,
+    };
   }
 
   @Delete(':id')
