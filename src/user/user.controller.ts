@@ -86,7 +86,20 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  async remove(@Param('id') id: number) {
+    const data = await this.userService.remove(id);
+
+    if (data) {
+      return {
+        status: 200,
+        message: 'Success',
+        result: data,
+      };
+    }
+
+    return {
+      status: 404,
+      message: 'Not Found',
+    };
   }
 }

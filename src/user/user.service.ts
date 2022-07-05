@@ -1,15 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectModel(User.name) private userModel: SoftDeleteModel<UserDocument>,
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     const createUser = new this.userModel(createUserDto);
@@ -44,12 +43,29 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return this.userModel.findByIdAndUpdate(id, updateUserDto, { new: true });
+    const email = updateUserDto.email;
+
+    // Check if new email and old email are same
+    const user = await this.userModel.findById(id);
+    if (user.email === email) {
+      return await this.userModel.findByIdAndUpdate(id, updateUserDto);
+    }
+
+    // Check unique validation
+    const record_count = await this.findByEmail(email);
+    if (record_count) {
+      throw new HttpException('Email already exists', 400);
+    }
+
+    return await this.userModel.findByIdAndUpdate(id, updateUserDto, {
+      new: true,
+    });
   }
 
+  // Todo: Implement soft delete
   async remove(id: number) {
-    const filter = { _id: id };
-    const deleted = await this.userModel.softDelete(filter);
+    // const filter = { _id: id };
+    const deleted = await this.userModel.findByIdAndDelete(id);
     return deleted;
   }
 

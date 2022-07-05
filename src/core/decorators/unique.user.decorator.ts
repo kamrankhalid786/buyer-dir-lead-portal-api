@@ -1,4 +1,4 @@
-import { getModelToken, InjectModel } from '@nestjs/mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 import {
   ValidationArguments,
   ValidatorConstraint,

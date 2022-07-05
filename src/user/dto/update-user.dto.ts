@@ -10,8 +10,9 @@ export class UpdateUserDto {
 
   @IsNotEmpty()
   @IsEmail()
-  @Validate(UniqueValidator, ['email'], { message: 'email already taken' })
+  // @Validate(UniqueValidator, ['email'], { message: 'email already taken' })
   email: string;
+
   phone: string;
 
   @IsNotEmpty()
