@@ -65,6 +65,17 @@ export class UserController {
     };
   }
 
+  @Get('/loan-officers')
+  async findAllLoanOfficers() {
+    const data = await this.userService.findAllLoanOfficers();
+
+    return {
+      status: 200,
+      message: 'Success',
+      result: data,
+    };
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: number) {
     const data = await this.userService.findOne(id);
