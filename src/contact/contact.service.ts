@@ -1,26 +1,53 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Contact, ContactDocument } from './contact.schema';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 
 @Injectable()
 export class ContactService {
-  create(createContactDto: CreateContactDto) {
-    return 'This action adds a new contact';
+  constructor(
+    @InjectModel(Contact.name) private contactModel: Model<ContactDocument>,
+  ) {}
+
+  async create(createContactDto: CreateContactDto) {
+    const data = new this.contactModel(createContactDto);
+    return await data.save();
   }
 
-  findAll() {
-    return `This action returns all contact`;
+  findAll(options): Promise<Contact[]> {
+    const sort = options.sort;
+    const page: number = options.page || 1;
+    const limit = options.limit || 10;
+
+    const data = this.contactModel
+      .find({}, {}, { sort })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .populate({
+        path: 'loanOfficer',
+        select: ['firstName', 'lastName'],
+        options: { strictPopulate: false },
+      })
+      .exec();
+
+    return data;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} contact`;
+  async count() {
+    return await this.contactModel.countDocuments();
   }
 
-  update(id: number, updateContactDto: UpdateContactDto) {
-    return `This action updates a #${id} contact`;
+  async findOne(id: number) {
+    return await this.contactModel.findById(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} contact`;
+  async update(id: number, updateContactDto: UpdateContactDto) {
+    return await this.contactModel.findByIdAndUpdate(id, updateContactDto);
+  }
+
+  async remove(id: number) {
+    return await this.contactModel.findByIdAndRemove(id);
   }
 }
