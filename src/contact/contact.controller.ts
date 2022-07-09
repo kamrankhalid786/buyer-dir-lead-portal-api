@@ -8,7 +8,10 @@ import {
   Delete,
   Req,
   Query,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
@@ -20,6 +23,19 @@ export class ContactController {
   @Post()
   async create(@Body() createContactDto: CreateContactDto) {
     const data = await this.contactService.create(createContactDto);
+
+    return {
+      status: 201,
+      message: 'Success',
+      result: data,
+      meta: {},
+    };
+  }
+
+  @Post('/import')
+  @UseInterceptors(FileInterceptor('contactFile'))
+  async importCsv(@UploadedFile() file: Express.Multer.File, @Body() body) {
+    const data = await this.contactService.importCsv(file, body);
 
     return {
       status: 201,
