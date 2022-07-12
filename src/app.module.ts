@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module';
 import { RolesModule } from './roles/roles.module';
 import { ContactModule } from './contact/contact.module';
 import { SeedModule } from './shared/seed.module';
+import { CommandModule } from 'nestjs-command';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { SeedModule } from './shared/seed.module';
     RolesModule,
     ContactModule,
     SeedModule,
+    CommandModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -11,5 +11,6 @@ import { UniqueValidator } from 'src/core/decorators/unique.user.decorator';
   ],
   controllers: [UserController],
   providers: [UserService, UniqueValidator],
+  exports: [UserService],
 })
 export class UserModule {}

@@ -17,7 +17,7 @@ export class UserSeed {
       email: 'kamrankhalid06@yahoo.com',
       password: '123456',
       userRole: '62c0d52a777bd22068dd774f',
-      phone: '',
+      phone: '1112223333',
       confirmPassword: '123456',
     });
     console.log(`User created: ${user.firstName} ${user.lastName}`);
