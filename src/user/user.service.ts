@@ -5,13 +5,22 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const createUser = new this.userModel(createUserDto);
+    const saltOrRounds = 10;
+    createUserDto.password = await bcrypt.hashSync(
+      createUserDto.password,
+      saltOrRounds,
+    );
+
+    createUserDto.email = createUserDto.email.toLowerCase();
+
+    const createUser = await new this.userModel(createUserDto);
     return await createUser.save();
   }
 
@@ -80,6 +89,7 @@ export class UserService {
   }
 
   async findByEmail(email: string) {
-    return await this.userModel.findOne({ email });
+    const userEmail = email.toLowerCase();
+    return await this.userModel.findOne({ email: userEmail });
   }
 }
