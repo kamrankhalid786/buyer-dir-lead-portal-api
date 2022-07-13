@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Head,
+  Headers,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 import { UserService } from 'src/user/user.service';
 import { AuthService } from './auth.service';
@@ -13,8 +22,8 @@ export class AuthController {
 
   @Get('/onlyauth')
   @UseGuards(AuthGuard('jwt'))
-  async hiddenInformation() {
-    return 'hidden information';
+  async hiddenInformation(@Req() req) {
+    return req.user;
   }
 
   @Post('login')
@@ -25,5 +34,12 @@ export class AuthController {
     };
     const token = await this.authService.signPayload(payload);
     return { user, token };
+  }
+
+  // Get user by token
+  @Get('/me')
+  @UseGuards(AuthGuard('jwt'))
+  async me(@Req() req) {
+    return req.user;
   }
 }

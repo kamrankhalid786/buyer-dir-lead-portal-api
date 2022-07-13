@@ -1,11 +1,13 @@
 {
   "folders": [
-	{
-		"path": "../buyer-dir-lead-portal"
-	},
-	{
-		"path": "."
-	}
-],
-  "settings": {}
+    {
+      "path": "../buyer-dir-lead-portal"
+    },
+    {
+      "path": "."
+    }
+  ],
+  "settings": {
+    "cSpell.words": ["nuxtjs"]
+  }
 }

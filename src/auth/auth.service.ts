@@ -30,4 +30,8 @@ export class AuthService {
   async signPayload(payload) {
     return sign(payload, process.env.SECRET_KEY, { expiresIn: '7d' });
   }
+
+  async verifyToken(token) {
+    return await sign(token, process.env.SECRET_KEY);
+  }
 }
