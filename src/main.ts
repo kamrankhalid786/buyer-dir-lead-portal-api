@@ -6,6 +6,7 @@ import * as session from 'express-session';
 import { AppModule } from './app.module';
 import { createDocument } from './swagger/swagger';
 import * as passport from 'passport';
+import 'dotenv/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });

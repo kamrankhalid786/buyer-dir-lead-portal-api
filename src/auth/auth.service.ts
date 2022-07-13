@@ -1,6 +1,7 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
+import { sign } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -20,5 +21,13 @@ export class AuthService {
     }
 
     throw new NotAcceptableException('Invalid credentials');
+  }
+
+  async validateUserToken(email) {
+    return await this.userService.findByPayload(email);
+  }
+
+  async signPayload(payload) {
+    return sign(payload, process.env.SECRET_KEY, { expiresIn: '7d' });
   }
 }

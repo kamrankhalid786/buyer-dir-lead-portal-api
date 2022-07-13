@@ -17,7 +17,7 @@ export class ContactService {
   }
 
   async importCsv(file, body): Promise<Contact[]> {
-    // Todo: import csv and create contacts in database
+    // TODO: import csv and create contacts in database
     const contacts = await this.contactModel.insertMany(
       JSON.parse(body.contactFileData),
     );

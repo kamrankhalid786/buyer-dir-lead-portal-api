@@ -9,32 +9,19 @@ import {
   UseFilters,
   Query,
   Req,
-  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { HttpExceptionFilter } from '../core/filter/exception';
-import { LocalAuthGuard } from '../auth/local.auth.guard';
-import { AuthenticatedGuard } from '../auth/authenticated.guard';
+import { AuthService } from '../auth/auth.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
-
-  //Post / Login
-  @UseGuards(LocalAuthGuard)
-  @Post('/login')
-  login(@Req() req): any {
-    return { User: req.user, msg: 'User logged in' };
-  }
-
-  // Get / protected
-  @UseGuards(AuthenticatedGuard)
-  @Get('/protected')
-  getHello(@Req() req): string {
-    return req.user;
-  }
+  constructor(
+    private readonly userService: UserService,
+    private authService: AuthService,
+  ) {}
 
   @Post()
   async create(@Body() createUserDto: CreateUserDto) {
@@ -130,4 +117,18 @@ export class UserController {
       message: 'Not Found',
     };
   }
+
+  //Post / Login User With Session
+  // @UseGuards(LocalAuthGuard)
+  // @Post('/login')
+  // login(@Req() req): any {
+  //   return { User: req.user, msg: 'User logged in' };
+  // }
+
+  // Get / protected
+  // @UseGuards(AuthenticatedGuard)
+  // @Get('/protected')
+  // getHello(@Req() req): string {
+  //   return req.user;
+  // }
 }
