@@ -33,13 +33,22 @@ export class AuthController {
       email: user.email,
     };
     const token = await this.authService.signPayload(payload);
-    return { user, token };
+    return { user, token, token_type: 'Bearer' };
   }
 
   // Get user by token
   @Get('/me')
   @UseGuards(AuthGuard('jwt'))
   async me(@Req() req) {
-    return req.user;
+    return {
+      data: {
+        attributes: {
+          email: req.user.email,
+          name: req.user.firstName,
+        },
+        id: req.user._id,
+        type: 'users',
+      },
+    };
   }
 }
