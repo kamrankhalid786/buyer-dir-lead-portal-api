@@ -45,12 +45,22 @@ export class ParametersService {
   }
 
   async update(id: number, updateParameterDto: UpdateParameterDto) {
-    return await this.parameterModel.findByIdAndUpdate(id, updateParameterDto, {
-      new: true,
-    });
+    const data = await this.parameterModel
+      .findByIdAndUpdate(id, updateParameterDto, {
+        new: true,
+      })
+      .populate({
+        path: 'roleId',
+        select: 'name',
+        options: { strictPopulate: false },
+      })
+      .exec();
+
+    return data;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} parameter`;
+  async remove(id: number) {
+    const deleted = await this.parameterModel.findByIdAndDelete(id);
+    return deleted;
   }
 }
