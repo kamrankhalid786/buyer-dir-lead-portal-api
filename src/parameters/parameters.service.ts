@@ -44,8 +44,10 @@ export class ParametersService {
     return `This action returns a #${id} parameter`;
   }
 
-  update(id: number, updateParameterDto: UpdateParameterDto) {
-    return `This action updates a #${id} parameter`;
+  async update(id: number, updateParameterDto: UpdateParameterDto) {
+    return await this.parameterModel.findByIdAndUpdate(id, updateParameterDto, {
+      new: true,
+    });
   }
 
   remove(id: number) {

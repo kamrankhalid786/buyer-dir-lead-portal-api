@@ -69,11 +69,16 @@ export class ParametersController {
   }
 
   @Patch(':id')
-  update(
-    @Param('id') id: string,
+  async update(
+    @Param('id') id: number,
     @Body() updateParameterDto: UpdateParameterDto,
   ) {
-    return this.parametersService.update(+id, updateParameterDto);
+    const data = await this.parametersService.update(id, updateParameterDto);
+    return {
+      status: 200,
+      message: 'Success',
+      result: data,
+    };
   }
 
   @Delete(':id')
