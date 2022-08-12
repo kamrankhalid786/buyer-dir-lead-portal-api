@@ -8,11 +8,14 @@ import {
   Delete,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ParametersService } from './parameters.service';
 import { CreateParameterDto } from './dto/create-parameter.dto';
 import { UpdateParameterDto } from './dto/update-parameter.dto';
+import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('parameters')
 export class ParametersController {
   constructor(private readonly parametersService: ParametersService) {}

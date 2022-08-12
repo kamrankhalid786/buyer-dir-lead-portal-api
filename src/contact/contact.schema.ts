@@ -5,6 +5,9 @@ export type ContactDocument = Contact & Document;
 
 @Schema({ timestamps: true, collection: 'contacts', versionKey: false })
 export class Contact {
+  @Prop({ type: Types.ObjectId })
+  _id: Types.ObjectId;
+
   @Prop({ required: true })
   firstName: string;
 

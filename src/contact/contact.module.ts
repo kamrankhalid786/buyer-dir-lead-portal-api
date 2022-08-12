@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { ContactController } from './contact.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Contact, ContactSchema } from './contact.schema';
+import { LoggerMiddleware } from 'src/core/middleware/logger.middleware';
 
 @Module({
   imports: [
@@ -11,4 +12,8 @@ import { Contact, ContactSchema } from './contact.schema';
   controllers: [ContactController],
   providers: [ContactService],
 })
-export class ContactModule {}
+export class ContactModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('contact');
+  }
+}

@@ -10,12 +10,15 @@ import {
   Query,
   UseInterceptors,
   UploadedFile,
+  UseGuards,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('contact')
 export class ContactController {
   constructor(private readonly contactService: ContactService) {}

@@ -8,7 +8,8 @@ import { UpdateContactDto } from './dto/update-contact.dto';
 @Injectable()
 export class ContactService {
   constructor(
-    @InjectModel(Contact.name) private contactModel: Model<ContactDocument>,
+    @InjectModel(Contact.name)
+    private contactModel: Model<ContactDocument>,
   ) {}
 
   async create(createContactDto: CreateContactDto) {
@@ -16,7 +17,7 @@ export class ContactService {
     return await data.save();
   }
 
-  async importCsv(file, body): Promise<Contact[]> {
+  async importCsv(file, body): Promise<Partial<Contact>[]> {
     // TODO: import csv and create contacts in database
     const contacts = await this.contactModel.insertMany(
       JSON.parse(body.contactFileData),

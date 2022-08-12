@@ -9,13 +9,16 @@ import {
   UseFilters,
   Query,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { HttpExceptionFilter } from '../core/filter/exception';
 import { AuthService } from '../auth/auth.service';
+import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('user')
 export class UserController {
   constructor(
