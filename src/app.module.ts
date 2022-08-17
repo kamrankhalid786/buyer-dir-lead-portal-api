@@ -17,7 +17,6 @@ import { ContactModule } from './contact/contact.module';
 import { ParametersModule } from './parameters/parameters.module';
 import { LoggerMiddleware } from './core/middleware/logger.middleware';
 import * as redisStore from 'cache-manager-redis-store';
-import { RedisClientOptions } from 'redis';
 
 @Module({
   imports: [
@@ -29,14 +28,16 @@ import { RedisClientOptions } from 'redis';
     CommandModule,
     AuthModule,
     ParametersModule,
-    CacheModule.register<RedisClientOptions>({
-      isGlobal: true,
+    CacheModule.register({
       store: redisStore,
-      url: 'redis://localhost:6379',
+      host: process.env.REDIS_HOST || 'localhost',
+      port: process.env.REDIS_PORT || 6379,
+      isGlobal: true,
+      ttl: 60 * 60 * 24,
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, Logger],
+  providers: [AppService, Logger, CacheModule],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

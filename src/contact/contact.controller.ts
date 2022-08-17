@@ -27,9 +27,9 @@ import { Cache } from 'cache-manager';
 @Controller('contact')
 export class ContactController {
   constructor(
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
     private readonly contactService: ContactService,
     private readonly logger: Logger,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   @Post()
