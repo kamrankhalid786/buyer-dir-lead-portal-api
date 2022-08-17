@@ -44,3 +44,4 @@ export class AppModule implements NestModule {
     consumer.apply(LoggerMiddleware).forRoutes('user');
   }
 }
+//TODO: Add redis cache parameters to .env file.
