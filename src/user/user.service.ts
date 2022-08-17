@@ -48,7 +48,7 @@ export class UserService {
   async findAllLoanOfficers(): Promise<User[]> {
     return await this.userModel.find(
       {
-        userRole: { $eq: '62c0d52a777bd22068dd774f' },
+        userRole: { $eq: '62cf363f81875f57191b1c8e' },
       },
       { _id: 1, firstName: 1, lastName: 1 },
       {},
@@ -59,7 +59,7 @@ export class UserService {
     return this.userModel.countDocuments();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return await this.userModel.findById(id, {});
   }
 

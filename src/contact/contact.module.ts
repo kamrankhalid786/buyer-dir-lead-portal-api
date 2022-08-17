@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer, Logger } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { ContactController } from './contact.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -10,7 +10,7 @@ import { LoggerMiddleware } from 'src/core/middleware/logger.middleware';
     MongooseModule.forFeature([{ name: Contact.name, schema: ContactSchema }]),
   ],
   controllers: [ContactController],
-  providers: [ContactService],
+  providers: [ContactService, Logger],
 })
 export class ContactModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

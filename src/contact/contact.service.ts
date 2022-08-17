@@ -17,7 +17,7 @@ export class ContactService {
     return await data.save();
   }
 
-  async importCsv(file, body): Promise<Partial<Contact>[]> {
+  async importCsv(file, body): Promise<any> {
     // TODO: import csv and create contacts in database
     const contacts = await this.contactModel.insertMany(
       JSON.parse(body.contactFileData),
@@ -29,9 +29,14 @@ export class ContactService {
     const sort = options.sort;
     const page: number = options.page || 1;
     const limit = options.limit || 10;
+    const filter = {};
+
+    if (options.user_id) {
+      filter['loanOfficer'] = options.user_id.toString();
+    }
 
     const data = this.contactModel
-      .find({}, {}, { sort })
+      .find(filter, {}, { sort })
       .skip((page - 1) * limit)
       .limit(limit)
       .populate({
@@ -48,7 +53,7 @@ export class ContactService {
     return await this.contactModel.countDocuments();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     return await this.contactModel.findById(id);
   }
 

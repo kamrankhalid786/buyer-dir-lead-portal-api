@@ -1,4 +1,10 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  Logger,
+  CacheModule,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -10,6 +16,9 @@ import { RolesModule } from './roles/roles.module';
 import { ContactModule } from './contact/contact.module';
 import { ParametersModule } from './parameters/parameters.module';
 import { LoggerMiddleware } from './core/middleware/logger.middleware';
+import * as redisStore from 'cache-manager-redis-store';
+import { RedisClientOptions } from 'redis';
+
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost:27017/test'),
@@ -20,9 +29,14 @@ import { LoggerMiddleware } from './core/middleware/logger.middleware';
     CommandModule,
     AuthModule,
     ParametersModule,
+    CacheModule.register<RedisClientOptions>({
+      isGlobal: true,
+      store: redisStore,
+      url: 'redis://localhost:6379',
+    }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Logger],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

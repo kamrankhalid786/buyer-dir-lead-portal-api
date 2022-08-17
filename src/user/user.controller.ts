@@ -84,7 +84,7 @@ export class UserController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: number) {
+  async findOne(@Param('id') id: string) {
     const data = await this.userService.findOne(id);
     return {
       status: 200,

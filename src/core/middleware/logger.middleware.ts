@@ -10,11 +10,11 @@ export class LoggerMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const header = req.headers;
 
-    if (header.authorization) {
-      next();
+    if (!header.authorization) {
+      throw new BadRequestException('Authorization header is missing');
     }
 
-    throw new BadRequestException('Authorization header is missing');
+    next();
   }
 }
 // TODO: implement logger middleware
