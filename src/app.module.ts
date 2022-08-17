@@ -16,6 +16,7 @@ import { RolesModule } from './roles/roles.module';
 import { ContactModule } from './contact/contact.module';
 import { ParametersModule } from './parameters/parameters.module';
 import { LoggerMiddleware } from './core/middleware/logger.middleware';
+import { DashboardModule } from './dashboard/dashboard.module';
 import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
@@ -35,6 +36,7 @@ import * as redisStore from 'cache-manager-redis-store';
       isGlobal: true,
       ttl: 60 * 60 * 24,
     }),
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService, Logger, CacheModule],

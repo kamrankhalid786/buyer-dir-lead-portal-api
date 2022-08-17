@@ -37,7 +37,7 @@ export class ContactController {
     try {
       this.logger.log('CREATE-CONTACT', createContactDto);
       const data = await this.contactService.create(createContactDto);
-      await this.cacheManager.set('contact', data);
+      await this.cacheManager.set('contact.create', data);
 
       return {
         status: 201,
