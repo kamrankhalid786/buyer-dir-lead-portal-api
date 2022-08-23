@@ -97,9 +97,15 @@ export class UserService {
 
   async findByLogin(UserDTO: LoginDTO) {
     const { email, password } = UserDTO;
-    const user = await this.userModel.findOne({
-      email: email.toLowerCase(),
-    });
+    const user = await this.userModel
+      .findOne({
+        email: email.toLowerCase(),
+      })
+      .populate({
+        path: 'userRole',
+        select: 'name',
+        options: { strictPopulate: false },
+      });
     if (!user) {
       throw new HttpException('user does not exists', HttpStatus.BAD_REQUEST);
     }

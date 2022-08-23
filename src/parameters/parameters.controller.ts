@@ -9,16 +9,21 @@ import {
   Query,
   Req,
   UseGuards,
+  Logger,
 } from '@nestjs/common';
 import { ParametersService } from './parameters.service';
 import { CreateParameterDto } from './dto/create-parameter.dto';
 import { UpdateParameterDto } from './dto/update-parameter.dto';
 import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
+import { RoleBaseParameterDto } from './types/role-base-parameters.dto';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('parameters')
 export class ParametersController {
-  constructor(private readonly parametersService: ParametersService) {}
+  constructor(
+    private readonly parametersService: ParametersService,
+    private readonly logger: Logger,
+  ) {}
 
   @Post()
   async create(@Body() createParameterDto: CreateParameterDto) {
@@ -64,6 +69,33 @@ export class ParametersController {
         sort_by: sortBy,
       },
     };
+  }
+
+  @Get('/role-base-parameters')
+  async findRoleBaseParameters(
+    @Query() query_sting: RoleBaseParameterDto,
+    @Req() req,
+  ) {
+    try {
+      const userRoleId = req.user.userRole;
+
+      const data = await this.parametersService.findRoleBaseParameters(
+        query_sting,
+        userRoleId,
+      );
+
+      return {
+        status: 200,
+        message: 'Success',
+        result: data,
+      };
+    } catch (error) {
+      this.logger.error('FIND-ROLE-BASE-PARAMETER-ERROR', error);
+      return {
+        status: 500,
+        message: 'Internal Server Error',
+      };
+    }
   }
 
   @Get(':id')

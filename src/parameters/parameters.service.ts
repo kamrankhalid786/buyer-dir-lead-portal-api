@@ -36,6 +36,10 @@ export class ParametersService {
     return data;
   }
 
+  async findRoleBaseParameters(querySting, userRoleId): Promise<Parameter[]> {
+    return await this.parameterModel.find({ roleId: userRoleId });
+  }
+
   async count() {
     return await this.parameterModel.countDocuments();
   }
